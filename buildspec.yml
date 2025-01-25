@@ -16,10 +16,10 @@ phases:
     commands:
       # Deploy Lambda Function Code
       - echo "Updating Lambda function code..."
-      - aws lambda update-function-code --function-name lambda_s3_manual_deployment_function --zip-file fileb://lambda-package.zip
+      - aws lambda update-function-code --function-name codebuild-airportcloudinfra-service-role  --zip-file fileb://lambda-package.zip
       - echo "Lambda function code updated."
       - sleep 10
-      - aws lambda update-function-configuration --function-name lambda_s3_manual_deployment_function --handler lambda.handler
+      - aws lambda update-function-configuration --function-name codebuild-airportcloudinfra-service-role  --handler lambda.handler
 
       # Interact with S3 Bucket
       - echo "Interacting with S3 bucket..."
