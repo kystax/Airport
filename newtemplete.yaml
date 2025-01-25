@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudFormation template to create an EC2 instance, S3 bucket, and RDS instance.
+
+Resources:
+  ## EC2 Instance ##
+  AppEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: "ami-053b12d3152c0cc71"
+      Tags:
+        - Key: "Name"
+          Value: "ec2_app_server_cloud_formation"
+
+  ## S3 Bucket ##
+  AppS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "s3-bucket-cloud-formation"
+      AccessControl: "Private"
+      VersioningConfiguration:
+        Status: "Enabled"
+      Tags:
+        - Key: "Name"
+          Value: "s3-bucket-cloud-formation"
+        - Key: "Environment"
+          Value: "Dev"
+
+  ## RDS Instance ##
+  AppRDSInstance:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBInstanceIdentifier: "rds-instance"
+      AllocatedStorage: 20
+      DBInstanceClass: "db.t3.micro"
+      Engine: "mysql"
+      MasterUsername: "admin"
+      MasterUserPassword: "Password123!" # Replace with a secure password
+      PubliclyAccessible: false
+      MultiAZ: false
+      BackupRetentionPeriod: 7
+      StorageType: "gp2"
+      Tags:
+        - Key: "Name"
+          Value: "rds-instance"
+
+Outputs:
+  EC2InstanceId:
+    Description: "The ID of the created EC2 instance"
+    Value: !Ref AppEC2Instance
+
+  S3BucketName:
+    Description: "The name of the created S3 bucket"
+    Value: !Ref AppS3Bucket
+
+  RDSInstanceEndpoint:
+    Description: "The endpoint of the created RDS instance"
+    Value: !GetAtt AppRDSInstance.Endpoint.Address
